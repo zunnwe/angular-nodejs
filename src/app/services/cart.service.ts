@@ -152,7 +152,7 @@ export class CartService {
       this.productDataClient.prodData[index].numInCart = data.numInCart;
       this.CalculateTotal();
       this.productDataClient.total = this.productDataServer.total;
-      localStorage.setItem('cart', JSON.stringify(this.productDataServer));
+      localStorage.setItem('cart', JSON.stringify(this.productDataClient));
     }
     // if the numInCart is not less than product.quantity
     else {
@@ -166,7 +166,7 @@ export class CartService {
         this.productDataClient.prodData[index].numInCart = data.numInCart;
         this.CalculateTotal();
         this.productDataClient.total = this.productDataServer.total;
-        localStorage.setItem('cart', JSON.stringify(this.productDataServer));
+        localStorage.setItem('cart', JSON.stringify(this.productDataClient));
       }
     }
   }
@@ -207,48 +207,44 @@ export class CartService {
     }
   }
 
-  CheckoutFromCart(userId: number): void{
-    this.http.post('${this.serverUrl}/products/payment', null).subscribe((res: {success: boolean}) => {
-    if (res.success) {
-      this.ResetServerTable();
-      this.http.post('${this.serverUrl}/orders/new', {
-        userId,
-        products: this.productDataClient.prodData
-      }).subscribe((data: OrderResponse) => {
-        this.orderSer.getSingleOrder(data.order_id).then(prods => {
-          if (data.success){
-            const navigationExtras: NavigationExtras = {
-              state: {
-                message: data.message,
-                products: prods,
-                orderId: data.order_id,
-                total: this.productDataClient.total
-              }
-            };
-            this.spinner.hide().then();
-            this.router.navigate(['/thankyou'], navigationExtras).then(p => {
-              this.productDataClient = {
-                total: 0,
-                prodData: [{
-                  numInCart: 0,
-                  id: 0
-                }]
+  CheckoutFromCart(userId: number): void {
+    this.http.post(`${this.serverUrl}/orders/payment`, null).subscribe((res: { success: boolean }) => {
+      if (res.success) {
+
+        this.ResetServerTable();
+        this.http.post(`${this.serverUrl}/orders/new`, {
+          userId,
+          products: this.productDataClient.prodData
+        }).subscribe((data: OrderResponse) => {
+          this.orderSer.getSingleOrder(data.order_id).then(prods => {
+            if (data.success) {
+              const navigationExtras: NavigationExtras = {
+                state: {
+                  message: data.message,
+                  products: prods,
+                  orderId: data.order_id,
+                  total: this.productDataClient.total
+                }
               };
-              this.cartTotal$.next(0);
-              localStorage.setItem('cart', JSON.stringify(this.productDataClient));
-            });
-          }
+
+              this.spinner.hide().then();
+              this.router.navigate(['/thankyou'], navigationExtras).then(p => {
+                this.productDataClient = {total: 0, prodData: [{numInCart: 0, id: 0}]};
+                this.cartTotal$.next(0);
+                localStorage.setItem('cart', JSON.stringify(this.productDataClient));
+              });
+            }
+          });
         });
-      });
-    } else {
-      this.spinner.hide().then();
-      this.router.navigateByUrl('/checkout').then();
-      this.toast.error('Sorry, failed to book the order', 'order status', {
-        timeOut: 1500,
-        progressBar: true,
-        progressAnimation: 'increasing',
-        positionClass: 'toast-top-right'
-      });
+      } else {
+        this.spinner.hide().then();
+        this.router.navigateByUrl('/checkout').then();
+        this.toast.error(`Sorry, failed to book the order`, 'Order Status', {
+          timeOut: 1500,
+          progressBar: true,
+          progressAnimation: 'increasing',
+          positionClass: 'toast-top-right'
+        });
       }
     });
   }
@@ -258,10 +254,17 @@ export class CartService {
     this.productDataServer.data.forEach( p => {
       const {numInCart} = p;      // es6 destructuring
       const {price} = p.products;     // es6 destructuring
-      total = numInCart * price;
+      total += numInCart * price;
     });
     this.productDataServer.total = total;
     this.cartTotal$.next(this.productDataServer.total);
+  }
+
+  CalculateSubTotal(index: number): number{
+    let subTotal = 0;
+    const p = this.productDataServer.data[index];
+    subTotal = p.products.price * p.numInCart;
+    return subTotal;
   }
 
   private ResetServerTable(): void {

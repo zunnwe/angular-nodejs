@@ -1,1 +1,123 @@
-<p>checkout works!</p>
+<ngx-spinner bdColor="rgba(151,149,149,0.4)" size="large" color="orange" type="ball-clip-rotate-pulse" fullScreen="true">
+  <p style="font-size: 20px; color: black">Booking Order...</p>
+</ngx-spinner>
+<div class="container" *ngIf="cartTotal > 0">
+  <div class="row">
+    <div class="col-md-7">
+      <div class="billing-details">
+        <div class="section-title">
+          <h3 class="title">Billing address</h3>
+        </div>
+        <div class="form-group">
+          <input class="input" type="text" name="first-name" placeholder="First Name">
+        </div>
+        <div class="form-group">
+          <input class="input" type="text" name="last-name" placeholder="Last Name">
+        </div>
+        <div class="form-group">
+          <input class="input" type="email" name="email" placeholder="Email">
+        </div>
+        <div class="form-group">
+          <input class="input" type="text" name="address" placeholder="Address">
+        </div>
+        <div class="form-group">
+          <input class="input" type="text" name="city" placeholder="City">
+        </div>
+        <div class="form-group">
+          <input class="input" type="text" name="country" placeholder="Country">
+        </div>
+        <div class="form-group">
+          <input class="input" type="tel" name="telephone" placeholder="Telephone">
+        </div>
+        <div class="form-group">
+          <div class="input-checkbox">
+            <input type="checkbox" id="create-account">
+            <label for="create-account">
+              <span></span>
+              Create Account?
+            </label>
+            <div class="caption">
+              <input class="input" type="password" name="password" placeholder="Enter Your Password">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="shiping-details">
+        <div class="section-title">
+          <h3 class="title">Shipping address</h3>
+        </div>
+        <div class="input-checkbox">
+          <input type="checkbox" id="shipping-address">
+          <label for="shipping-address">
+            <span></span>
+            Ship to a different address?
+          </label>
+          <div class="caption">
+            <div class="form-group">
+              <input class="input" type="text" name="first-name" placeholder="First Name">
+            </div>
+            <div class="form-group">
+              <input class="input" type="text" name="last-name" placeholder="Last Name">
+            </div>
+            <div class="form-group">
+              <input class="input" type="email" name="email" placeholder="Email">
+            </div>
+            <div class="form-group">
+              <input class="input" type="text" name="address" placeholder="Address">
+            </div>
+            <div class="form-group">
+              <input class="input" type="text" name="city" placeholder="City">
+            </div>
+            <div class="form-group">
+              <input class="input" type="text" name="country" placeholder="Country">
+            </div>
+            <div class="form-group">
+              <input class="input" type="tel" name="telephone" placeholder="Telephone">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="order-notes">
+        <textarea class="input" placeholder="Order notes"></textarea>
+      </div>
+    </div>
+    <div class="col-md-5 order-details">
+      <div class="section-title text-center">
+        <h3 class="title">Your Order</h3>
+      </div>
+      <div class="order-summary">
+        <div class="order-col">
+          <div><strong>PRODUCT</strong></div>
+          <div><strong>TOTAL</strong></div>
+        </div>
+        <div class="order-products">
+          <div class="order-col" *ngFor="let c of cartData.data">
+            <div>{{c.numInCart}} x {{c.products.name}}</div>
+            <div>{{(c.products.price * c.numInCart) | currency: 'USD'}}</div>
+          </div>
+        </div>
+        <div class="order-col">
+          <div>Shipping</div>
+          <div><strong>Free</strong></div>
+        </div>
+        <div class="order-col">
+          <div><strong>Total</strong></div>
+          <div><strong class="order-total">{{cartTotal | currency: 'USD'}}</strong> </div>
+        </div>
+      </div>
+      <div class="input-checkbox">
+        <input type="checkbox" id="terms">
+          <label for="terms">
+            <span></span>
+            I've read and accept the <a href="#">terms and conditions</a>
+          </label>
+      </div>
+      <button class="btn btn-outline-danger btn-sm btn-block order-submit" (click)="OnCheckout()">Place order</button>
+    </div>
+  </div>
+</div>
+<div class="text-center my-5" *ngIf="cartData.total <= 0">
+  <h4>Your cart is empty</h4>
+  <button class="btn btn-primary btn-lg mt-3" routerLink="/">Go to shop</button>
+</div>
+
