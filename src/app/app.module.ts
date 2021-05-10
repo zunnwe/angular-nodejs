@@ -15,6 +15,10 @@ import {HttpClientModule} from '@angular/common/http';
 import { OrderComponent } from './components/order/order.component';
 import {NgxSpinnerModule} from 'ngx-spinner';
 import {ToastrModule} from 'ngx-toastr';
+import { LoginComponent } from './components/login/login.component';
+import { RegisterComponent } from './components/register/register.component';
+import { ProfileComponent } from './components/profile/profile.component';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 
 @NgModule({
@@ -23,19 +27,25 @@ import {ToastrModule} from 'ngx-toastr';
     HeaderComponent,
     FooterComponent,
     CheckoutComponent,
-    ProductComponent,
     HomeComponent,
     CartComponent,
     ThankyouComponent,
-    OrderComponent
+    OrderComponent,
+    LoginComponent,
+    RegisterComponent,
+    ProfileComponent,
+    ProductComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+    NoopAnimationsModule,
     BrowserAnimationsModule,
     NoopAnimationsModule,
     NgxSpinnerModule,
+    FormsModule,
+    ReactiveFormsModule,
     ToastrModule.forRoot()
   ],
   providers: [],

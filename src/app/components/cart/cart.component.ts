@@ -20,7 +20,7 @@ export class CartComponent implements OnInit {
   }
 
   ChangeQuantity(index: number, increase: boolean): void{
-    this.cartSer.UpdateCart(index, increase);
+    this.cartSer.UpdateCartItems(index, increase);
   }
 
 }

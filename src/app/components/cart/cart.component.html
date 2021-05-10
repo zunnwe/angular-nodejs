@@ -21,19 +21,19 @@
         <tbody>
           <tr *ngFor="let c of cartData.data; let i = index;">
             <td class="d-flex align-items-center justify-content-around">
-              <img [src]="c.products.image" alt="{{c.products.name}}" height="60" class="order-1">
+              <img [src]="c.product.image" alt="{{c.product.name}}" height="60" class="order-1">
               <span class="text-danger mr-md-2" style="cursor: pointer;"><i class="fa fa-trash" (click)="cartSer.DeleteProductFromCart(i)"></i> </span>
             </td>
-              <td>{{c.products.name}}</td>
+              <td>{{c.product.name}}</td>
 
-              <td>{{c.products.price | currency: 'USD'}}</td>
+              <td>{{c.product.price | currency: 'USD'}}</td>
 
               <td>
                 <form>
                   <div class="value-button" id="decrease" (click)="ChangeQuantity(i, false)">
                     <i class="fa fa-minus"></i>
                   </div>
-                  <input type="number" id="number" [value]="c.numInCart" readonly [max]="c.products.quantity"/>
+                  <input type="number" id="number" [value]="c.numInCart" readonly [max]="c.product.quantity"/>
                   <div class="value-button" id="increase" (click)="ChangeQuantity(i, true)">
                     <i class="fa fa-plus"></i>
                   </div>
