@@ -19,7 +19,9 @@ import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-
+import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-login';
+import { GoogleLoginProvider } from 'angularx-social-login';
+import { HomeLayoutComponent } from './components/home-layout/home-layout.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +36,8 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
     LoginComponent,
     RegisterComponent,
     ProfileComponent,
-    ProductComponent
+    ProductComponent,
+    HomeLayoutComponent
   ],
   imports: [
     BrowserModule,
@@ -46,9 +49,25 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
     NgxSpinnerModule,
     FormsModule,
     ReactiveFormsModule,
+    SocialLoginModule,
     ToastrModule.forRoot()
   ],
-  providers: [],
+  providers: [
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider(
+              '587023855266-ov1gn3vh0hlgasi5i98iijjigjp6igf4.apps.googleusercontent.com'
+            )
+          }
+        ]
+      } as SocialAuthServiceConfig,
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
